@@ -1,0 +1,99 @@
+.card{
+    margin: 0 auto;
+    max-width: 250px;
+    min-height: 420px;
+    height: max-content;
+    background-image: linear-gradient(#0f1626, #ffffff);
+    color: #0f1626;
+    cursor: pointer;
+    border-radius: 2px;
+    border: 1px solid #f5f5f5;
+    transition: all .4s ease-in-out;
+    flex: 1;
+}
+
+    .card:hover {
+        
+        transform: translateY(-5px);
+        box-shadow: 5px 5px 15px black;
+    }
+
+.avatar {
+
+    max-width: 350px;
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.avatar img {
+
+    border-radius: 2px 2px 0 0;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.avatar figcaption {
+
+    width: 100%;
+    text-align: end;
+    padding-right: 5px;
+    margin: 5px auto;
+    box-sizing: border-box;
+    font-size: .9rem;
+    color: #0f1626;
+}
+
+.cardInfos {
+
+    height: 165px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.cardInfos h3 {
+
+    margin: 5px auto;
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: #ff533d;
+    box-sizing: border-box;
+    font-size: .9rem;
+    color: #ffffff;
+}
+
+.bio {
+
+    width: 90%;
+    min-height: 60px;
+    height: max-content;
+    margin: 10px auto;
+    text-align: justify;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.repos  {
+
+    height: 20px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.repos span {
+
+    font-weight: bold;
+}
+
+
+/* 
+#0f1626
+#ab987a
+#ff533d
+#f5f5f5 */
