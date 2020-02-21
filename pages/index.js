@@ -18,26 +18,39 @@ const HomePage = ({ cardsData }) => {
 
     const [usernameInput, setUsernameInput] = useState('');
     const [message, setMessage] = useState('');
+    const [newUser, setNewUser] = useState({});
 
     const [cards, setCards] = useState(cardsData);
+    useEffect( () => {
+        const addingNewCard = () => {
+    
+            setCards( [newUser, ...cards] );
+            setMessage(`${newUser.login} adicionado com sucesso!`);
+            setUsernameInput('');
+            setNewUser({})
+        }
+
+        if (newUser && newUser.id) addingNewCard();
+    }, [newUser]);
+
     useEffect(() => {
     
         if (cards.length === 0) setMessage('Você não possui nenhum card =/');
-    }, [cards]);  
+    }, [cards]);
 
-
-    const fetchingCard = githubUsername => {
+    const fetchingCard = async githubUsername => {
         
-        const addingNewCard = user => {
-    
-            setCards( [user, ...cards] );
-            setMessage(`${user.login} adicionado com sucesso!`);
-            setUsernameInput('');
+        try {
+            const githubResponse = await getGithubUser(githubUsername);
+            const user = await githubResponse.json();
+            
+            (user && user.id) 
+                ? setNewUser(user)
+                : setMessage(`${githubUsername} é um usuário inválido`);
+        
+        } catch (err) {
+            setMessage(`Não foi possível adicionar um novo card (${err}).`)
         }
-
-        getGithubUser(githubUsername)
-            .then( user => addingNewCard(user) ) 
-            .catch( e => setMessage(`Não foi possível adicionar este card. ${e}.`) );
     }
 
 
