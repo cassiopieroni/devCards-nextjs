@@ -23,7 +23,7 @@ const Repositories = ({ repos }) => (
 
     <ul>
         { repos.map( repo =>  
-            <li className={styles.repo}>
+            <li className={styles.repo} key={repo.id} >
                 <a target='_blank' href={repo.html_url}>
                     {repo.name}
                 </a>
