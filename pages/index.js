@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import fetch from 'isomorphic-unfetch';
 
-import PageDisplay from '../components/pageDisplay/PageDisplay';
-import AddCardForm from '../components/addCardForm/AddCardForm';
-import CardsArea from '../components/cardsArea/CardsArea';
+import PagesDisplay from '../components/commonComps/PagesDisplay';
+import AddCardForm from '../components/indexPage/AddCardForm';
+import CardsArea from '../components/indexPage/CardsArea';
 
 import { getGithubUser } from '../requests/getGithubUser';
 import { isRepeatedCard } from '../helpers/isRepeatedCard';
 
-import styles from '../components/HomePage.module.css';
+import css from 'styled-jsx/css';
 
 
-const HomePage = ({ cardsData }) => {
+const HomePage = ({ initialCards }) => {
 
     const router = useRouter();
 
@@ -20,14 +20,14 @@ const HomePage = ({ cardsData }) => {
     const [message, setMessage] = useState('');
     const [newUser, setNewUser] = useState({});
 
-    const [cards, setCards] = useState(cardsData);
+    const [cards, setCards] = useState(initialCards);
     useEffect( () => {
         const addingNewCard = () => {
     
             setCards( [newUser, ...cards] );
             setMessage(`${newUser.login} adicionado com sucesso!`);
             setUsernameInput('');
-            setNewUser({})
+            setNewUser({});
         }
 
         if (newUser && newUser.id) addingNewCard();
@@ -35,18 +35,19 @@ const HomePage = ({ cardsData }) => {
 
     useEffect(() => {
     
-        if (cards.length === 0) setMessage('Você não possui nenhum card =/');
+        if (!cards || cards.length === 0) setMessage('Você não possui nenhum card =/');
     }, [cards]);
 
-    const fetchingCard = async githubUsername => {
+
+    const fetchingCard = async () => {
         
         try {
-            const githubResponse = await getGithubUser(githubUsername);
+            const githubResponse = await getGithubUser(usernameInput);
             const user = await githubResponse.json();
             
-            (user && user.id) 
+            return (user && user.id) 
                 ? setNewUser(user)
-                : setMessage(`${githubUsername} é um usuário inválido`);
+                : setMessage(`${usernameInput} é um usuário inválido`);
         
         } catch (err) {
             setMessage(`Não foi possível adicionar um novo card (${err}).`)
@@ -59,16 +60,15 @@ const HomePage = ({ cardsData }) => {
         
         e.preventDefault();
         setMessage('carregando...');
-        const username = usernameInput;
 
-        return ( isRepeatedCard(cards, username) ) 
-            ? setMessage(`${username} já faz parte da sua lista de cards.`) 
-            : fetchingCard(username);
+        return ( isRepeatedCard(cards, usernameInput) ) 
+            ? setMessage(`${usernameInput} já faz parte da sua lista de cards.`) 
+            : fetchingCard();
     }
 
     const handleUsernameControllInput = e => setUsernameInput(e.target.value);
 
-    const handleChangePage = userLogin => router.push('/card/[user]', `/card/${userLogin}`);
+    const handleChangeToUserPage = userLogin => router.push('/card/[user]', `/card/${userLogin}`);
 
     const handleDeleteCard = userLogin => {
         
@@ -80,9 +80,9 @@ const HomePage = ({ cardsData }) => {
 
     
     return (
-        <PageDisplay>
+        <PagesDisplay>
 
-            <div className={styles.container}>
+            <div className='container'>
 
                 <AddCardForm 
                     handleSubmit={handleSubmitAddCard}
@@ -90,21 +90,43 @@ const HomePage = ({ cardsData }) => {
                     username={usernameInput}
                 />
 
-                { (message) && <p className={styles.msg} >{message}</p> }
+                { (message) && <p className='msg' >{message}</p> }
 
-                { (cards.length > 0) && (
+                { (cards && cards.length > 0) && (
                     <CardsArea 
                         cards={cards} 
-                        changePage={handleChangePage} 
+                        changePage={handleChangeToUserPage} 
                         deleteCard={handleDeleteCard} 
                     />
                 )}
 
             </div>
+            
+            <style jsx>{ homePageStyles }</style>
 
-        </PageDisplay>
+        </PagesDisplay>
     )
 };
+
+const homePageStyles = css`
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        min-height: 100%;
+        background-color: #0f1626;
+    }
+
+    .msg {
+        text-transform: uppercase;
+        max-width: 550px;
+        margin: 30px auto 10px;
+        height: 40px;
+        text-align: center;
+        color: #ff533d;
+    }
+`;
 
 HomePage.getInitialProps = async () => {
 
@@ -115,9 +137,9 @@ HomePage.getInitialProps = async () => {
     const res = await fetch(`${CARDS_API}`);
     const cards = await res.json();
 
-    const cardsData = [cards]; // a API retornaria um [] de cards;
+    const initialCards = (cards && cards.id) ? [cards] : null ; // a API retornaria um [] de cards;
 
-    return { cardsData }
+    return { initialCards }
 }
 
 export default HomePage;

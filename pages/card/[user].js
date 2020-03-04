@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import fetch from 'isomorphic-unfetch';
-import PageDisplay from '../../components/pageDisplay/PageDisplay';
-import RepositoriesArea from '../../components/RepositoriesArea/RepositoriesArea';
-import UserHeader from '../../components/userHeader/UserHeader';
 
-import styles from '../../components/UserPage.module.css';
+import PagesDisplay from '../../components/commonComps/PagesDisplay';
+import RepositoriesArea from '../../components/userPage/RepositoriesArea';
+import UserPefilBox from '../../components/userPage/UserPerfilBox';
 
+import css from 'styled-jsx/css';
 
 const UserPage = ({ userData, userRepos }) => {
 
@@ -18,16 +18,14 @@ const UserPage = ({ userData, userRepos }) => {
         setReposToPrint(newReposToPrint);
     }, [filterInputVal])
 
-
     const handleChangeFilterSearch = e => setFilterInputVal(e.target.value.toLowerCase());
-
     
-return (
-        <PageDisplay>
+    return (
+        <PagesDisplay>
 
-            <section className={styles.container}>
+            <section className='container'>
 
-                <UserHeader userData={userData} />
+                <UserPefilBox userData={userData} />
 
                 { userRepos.length > 0 && (
                     <RepositoriesArea
@@ -39,10 +37,23 @@ return (
                 )}
 
             </section>
-
-        </PageDisplay>
+            
+            <style jsx>{ userPageStyle }</style>
+        </PagesDisplay>
     )
 }
+
+const userPageStyle = css`
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        min-height: 100%;
+        background-color: #f5f5f5;
+        background-image: linear-gradient(#f5f5f5, #0f1626);
+    }
+`
 
 
 UserPage.getInitialProps = async ctx => {
