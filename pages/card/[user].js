@@ -4,44 +4,65 @@ import fetch from 'isomorphic-unfetch';
 import PagesDisplay from '../../components/commonComps/PagesDisplay';
 import RepositoriesArea from '../../components/userPage/RepositoriesArea';
 import UserPefilBox from '../../components/userPage/UserPerfilBox';
+import NotFoundData from '../../components/userPage/NotFoundData';
 
 import css from 'styled-jsx/css';
 
-const UserPage = ({ userData, userRepos }) => {
+const UserPage = ({ errorUserCode, errorReposCode, userData, initialRepos }) => {
 
     const [filterInputVal, setFilterInputVal] = useState('');
 
-    const [reposToPrint, setReposToPrint] = useState(userRepos);
-    useEffect( () => {
+    const [reposToPrint, setReposToPrint] = useState(initialRepos);
 
-        const newReposToPrint = userRepos.filter( repo => repo.name.includes(filterInputVal) );
-        setReposToPrint(newReposToPrint);
+    useEffect( () => {
+        const printingFilteredRepos = () => {
+            const newReposToPrint = initialRepos.filter( repo => repo.name.includes(filterInputVal) );
+            setReposToPrint(newReposToPrint);
+        }
+
+        if (initialRepos.length > 0) 
+            printingFilteredRepos();
     }, [filterInputVal])
 
-    const handleChangeFilterSearch = e => setFilterInputVal(e.target.value.toLowerCase());
     
+    const handleChangeFilterSearch = e => setFilterInputVal(e.target.value.toLowerCase());
+
     return (
+
         <PagesDisplay>
 
             <section className='container'>
 
-                <UserPefilBox userData={userData} />
+                { (!errorUserCode && !errorReposCode) ? (
 
-                { userRepos.length > 0 && (
-                    <RepositoriesArea
-                        repos={reposToPrint} 
-                        filterInputVal={filterInputVal}
-                        changeFilterSearch={handleChangeFilterSearch}
-                        html_url={userData.html_url}
+                    <>
+                        <UserPefilBox userData={userData} />
+
+                        <RepositoriesArea
+                            reposToPrint={reposToPrint}
+                            initialRepos={initialRepos}
+                            filterInputVal={filterInputVal}
+                            changeFilterSearch={handleChangeFilterSearch}
+                            html_url={userData.html_url}
+                        />
+                    </>
+
+                ) : (
+                    <NotFoundData
+                        userData={userData}
+                        errorUserCode={errorUserCode}
+                        errorReposCode={errorReposCode}
                     />
                 )}
 
             </section>
-            
+
             <style jsx>{ userPageStyle }</style>
+
         </PagesDisplay>
     )
 }
+        
 
 const userPageStyle = css`
     .container {
@@ -61,12 +82,14 @@ UserPage.getInitialProps = async ctx => {
     const { user } = ctx.query;
 
     const resUser = await fetch(`https://api.github.com/users/${user}`);
+    const errorUserCode = resUser.status > 200 ? resUser.status : false;
     const userData = await resUser.json();
     
-    const resRepos = await fetch(`https://api.github.com/users/${user}/repos`);
-    const userRepos = await resRepos.json();
+    const resRepos = await fetch(`https://api.github.com/usrs/${user}/repos`);
+    const errorReposCode = resRepos.status > 200 ? resRepos.status : false;
+    const initialRepos = await resRepos.json();
 
-    return { userData, userRepos }
+    return { errorUserCode, errorReposCode, userData, initialRepos }
 }
 
 export default UserPage;

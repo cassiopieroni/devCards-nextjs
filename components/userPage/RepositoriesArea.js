@@ -6,24 +6,36 @@ import Repositories from './Repositories';
 
 import css from 'styled-jsx/css';
 
-const RepositoriesArea = ({ repos, html_url, filterInputVal, changeFilterSearch }) => {
+const RepositoriesArea = ({ reposToPrint, initialRepos, html_url, filterInputVal, changeFilterSearch }) => {
 
     return (
         <div className='reposArea'>
             
             <h3>Repositories</h3>
 
-            <FilterBox filterInputVal={filterInputVal} changeFilterSearch={changeFilterSearch} />
+            { (initialRepos.length > 0) ? (
+                
+                <>
+                    <FilterBox 
+                        filterInputVal={filterInputVal} 
+                        changeFilterSearch={changeFilterSearch} 
+                    />
 
-            { (repos.length === 0) 
-                ? <NotFoundRepo link={html_url}/>
-                : <Repositories repos={repos}/>
-            }
+                    { (reposToPrint.length === 0) 
+                        ? <NotFoundRepo link={html_url}/>
+                        : <Repositories repos={reposToPrint}/>
+                    }
 
-            { (repos.length >= 30) && (
-                <a className='linkToPage' target='_blanc' href={html_url}>ver mais</a> 
+                    { (reposToPrint.length >= 30) && (
+                        <a className='linkToPage' target='_blanc' href={html_url}>view more</a> 
+                    )}
+                </>
+
+            ) : (
+
+                <p> usuário ainda não possui repositórios públicos no github </p>
             )}
-        
+
             <style jsx>{ repositoriesAreaStyle }</style>
 
         </div>

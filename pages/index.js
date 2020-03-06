@@ -12,7 +12,7 @@ import { isRepeatedCard } from '../helpers/isRepeatedCard';
 import css from 'styled-jsx/css';
 
 
-const HomePage = ({ initialCards }) => {
+const HomePage = ({ errorCode, initialCards }) => {
 
     const router = useRouter();
 
@@ -25,7 +25,7 @@ const HomePage = ({ initialCards }) => {
         const addingNewCard = () => {
     
             setCards( [newUser, ...cards] );
-            setMessage(`${newUser.login} adicionado com sucesso!`);
+            setMessage(`${newUser.login} added successfully!`);
             setUsernameInput('');
             setNewUser({});
         }
@@ -35,8 +35,9 @@ const HomePage = ({ initialCards }) => {
 
     useEffect(() => {
     
-        if (!cards || cards.length === 0) setMessage('Você não possui nenhum card =/');
-    }, [cards]);
+        if (!cards || cards.length === 0) setMessage(`You don't have any cards  =/`);
+        if (errorCode) setMessage(`Dev, we have a problem! (${errorCode})`);
+    }, [cards, errorCode]);
 
 
     const fetchingCard = async () => {
@@ -47,10 +48,10 @@ const HomePage = ({ initialCards }) => {
             
             return (user && user.id) 
                 ? setNewUser(user)
-                : setMessage(`${usernameInput} é um usuário inválido`);
+                : setMessage(`${usernameInput} is an invalid user`);
         
         } catch (err) {
-            setMessage(`Não foi possível adicionar um novo card (${err}).`)
+            setMessage(`Couldn't add a new card (${err}).`)
         }
     }
 
@@ -59,10 +60,10 @@ const HomePage = ({ initialCards }) => {
     const handleSubmitAddCard = e => {
         
         e.preventDefault();
-        setMessage('carregando...');
+        setMessage('Loading...');
 
         return ( isRepeatedCard(cards, usernameInput) ) 
-            ? setMessage(`${usernameInput} já faz parte da sua lista de cards.`) 
+            ? setMessage(`${usernameInput} is already on your card list.`) 
             : fetchingCard();
     }
 
@@ -74,10 +75,9 @@ const HomePage = ({ initialCards }) => {
         
         const newCards = cards.filter( card => card.login !== userLogin);
         setCards(newCards);
-        setMessage(`${userLogin} foi deletado com sucesso.`)
+        setMessage(`${userLogin} has been successfully deleted.`)
     }
     //------ EVENT HANDLE FUNCTIONS ---------------
-
     
     return (
         <PagesDisplay>
@@ -135,11 +135,12 @@ HomePage.getInitialProps = async () => {
     // originalmente buscaria um [] de cards em uma api
 
     const res = await fetch(`${CARDS_API}`);
+    const errorCode = res.status > 200 ? res.status : false;
     const cards = await res.json();
-
+    console.log(res)
     const initialCards = (cards && cards.id) ? [cards] : null ; // a API retornaria um [] de cards;
 
-    return { initialCards }
+    return { errorCode: null, initialCards: [] }
 }
 
 export default HomePage;
