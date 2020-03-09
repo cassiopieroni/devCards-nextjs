@@ -5,6 +5,7 @@ import fetch from 'isomorphic-unfetch';
 import PagesDisplay from '../components/commonComps/PagesDisplay';
 import AddCardForm from '../components/indexPage/AddCardForm';
 import CardsArea from '../components/indexPage/CardsArea';
+import ErrorBox from '../components/commonComps/ErrorBox';
 
 import { getGithubUser } from '../requests/getGithubUser';
 import { isRepeatedCard } from '../helpers/isRepeatedCard';
@@ -21,24 +22,21 @@ const HomePage = ({ errorCode, initialCards }) => {
     const [newUser, setNewUser] = useState({});
 
     const [cards, setCards] = useState(initialCards);
+    
+    useEffect(() => {
+    
+        if (cards.length === 0) setMessage(`You don't have any cards yet  =/`);
+    }, []);
+    
     useEffect( () => {
         const addingNewCard = () => {
-    
             setCards( [newUser, ...cards] );
             setMessage(`${newUser.login} added successfully!`);
             setUsernameInput('');
-            setNewUser({});
         }
 
         if (newUser && newUser.id) addingNewCard();
     }, [newUser]);
-
-    useEffect(() => {
-    
-        if (!cards || cards.length === 0) setMessage(`You don't have any cards  =/`);
-        if (errorCode) setMessage(`Dev, we have a problem! (${errorCode})`);
-    }, [cards, errorCode]);
-
 
     const fetchingCard = async () => {
         
@@ -78,26 +76,32 @@ const HomePage = ({ errorCode, initialCards }) => {
         setMessage(`${userLogin} has been successfully deleted.`)
     }
     //------ EVENT HANDLE FUNCTIONS ---------------
-    
+
     return (
         <PagesDisplay>
 
             <div className='container'>
 
-                <AddCardForm 
-                    handleSubmit={handleSubmitAddCard}
-                    handleUsername={handleUsernameControllInput}
-                    username={usernameInput}
-                />
+                { (!errorCode) ? (
+                    <>
+                        <AddCardForm 
+                            handleSubmit={handleSubmitAddCard}
+                            handleUsername={handleUsernameControllInput}
+                            username={usernameInput}
+                        />
 
-                { (message) && <p className='msg' >{message}</p> }
+                        <p className='msg' >{message}</p>
 
-                { (cards && cards.length > 0) && (
-                    <CardsArea 
-                        cards={cards} 
-                        changePage={handleChangeToUserPage} 
-                        deleteCard={handleDeleteCard} 
-                    />
+                        { (cards && cards.length > 0) && (
+                            <CardsArea 
+                                cards={cards} 
+                                changePage={handleChangeToUserPage} 
+                                deleteCard={handleDeleteCard} 
+                            />
+                        )}
+                    </>
+                ) : (
+                    <ErrorBox statusCode={errorCode} />
                 )}
 
             </div>
@@ -113,6 +117,7 @@ const homePageStyles = css`
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
         width: 100%;
         min-height: 100%;
         background-color: #0f1626;
@@ -130,17 +135,15 @@ const homePageStyles = css`
 
 HomePage.getInitialProps = async () => {
 
-    const CARDS_API = 'https://api.github.com/users/rocketseat';
+    const CARDS_API = 'https://api.github.com/users/cassiopieroni';
     // apenas simulando uma busca de cards
     // originalmente buscaria um [] de cards em uma api
 
     const res = await fetch(`${CARDS_API}`);
     const errorCode = res.status > 200 ? res.status : false;
     const cards = await res.json();
-    console.log(res)
-    const initialCards = (cards && cards.id) ? [cards] : null ; // a API retornaria um [] de cards;
 
-    return { errorCode: null, initialCards: [] }
+    return { errorCode, initialCards: [cards] }
 }
 
 export default HomePage;

@@ -3,37 +3,46 @@ import React from 'react';
 import FilterBox from './FilterBox';
 import NotFoundRepo from './NotFoundRepo';
 import Repositories from './Repositories';
+import ErrorBox from '../commonComps/ErrorBox';
 
 import css from 'styled-jsx/css';
 
-const RepositoriesArea = ({ reposToPrint, initialRepos, html_url, filterInputVal, changeFilterSearch }) => {
+const RepositoriesArea = (props) => {
+
+    const { reposToPrint, initialRepos, html_url, filterInputVal, changeFilterSearch, errorReposCode } = props;
 
     return (
         <div className='reposArea'>
             
             <h3>Repositories</h3>
 
-            { (initialRepos.length > 0) ? (
-                
-                <>
-                    <FilterBox 
-                        filterInputVal={filterInputVal} 
-                        changeFilterSearch={changeFilterSearch} 
-                    />
+            { (!errorReposCode) ? (
 
-                    { (reposToPrint.length === 0) 
-                        ? <NotFoundRepo link={html_url}/>
-                        : <Repositories repos={reposToPrint}/>
-                    }
+                (initialRepos.length === 0) ? (
+                    <p> User doesn't have any public repositories on github yet </p>
+                ) : (
 
-                    { (reposToPrint.length >= 30) && (
-                        <a className='linkToPage' target='_blanc' href={html_url}>view more</a> 
-                    )}
-                </>
+                    <>
+                        <FilterBox 
+                            filterInputVal={filterInputVal} 
+                            changeFilterSearch={changeFilterSearch} 
+                        />
 
+                        { (reposToPrint.length === 0) 
+                            ? <NotFoundRepo link={html_url}/>
+                            : <Repositories repos={reposToPrint}/>
+                        }
+
+                        { (reposToPrint.length >= 30) && (
+                            <a className='linkToPage' target='_blanc' href={html_url} >
+                                view all repositories
+                            </a> 
+                        )}
+                    </>
+                )
+            
             ) : (
-
-                <p> usuário ainda não possui repositórios públicos no github </p>
+                <ErrorBox statusCode={errorReposCode} />
             )}
 
             <style jsx>{ repositoriesAreaStyle }</style>
