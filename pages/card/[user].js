@@ -1,31 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import fetch from 'isomorphic-unfetch';
 
 import PagesDisplay from '../../components/commonComps/PagesDisplay';
-import RepositoriesArea from '../../components/userPage/RepositoriesArea';
-import UserPefilBox from '../../components/userPage/UserPerfilBox';
 import ErrorBox from '../../components/commonComps/ErrorBox';
+import UserWrapper from '../../wrappers/UserWrapper';
 
 import css from 'styled-jsx/css';
 
 const UserPage = ({ errorUserCode, errorReposCode, userData, initialRepos }) => {
-
-    const [filterInputVal, setFilterInputVal] = useState('');
-
-    const [reposToPrint, setReposToPrint] = useState(initialRepos);
-
-    useEffect( () => {
-        const printingFilteredRepos = () => {
-            const newReposToPrint = initialRepos.filter( repo => repo.name.includes(filterInputVal) );
-            setReposToPrint(newReposToPrint);
-        }
-
-        if (initialRepos.length > 0) 
-            printingFilteredRepos();
-    }, [filterInputVal])
-
-    
-    const handleChangeFilterSearch = e => setFilterInputVal(e.target.value.toLowerCase());
 
     return (
 
@@ -33,23 +15,12 @@ const UserPage = ({ errorUserCode, errorReposCode, userData, initialRepos }) => 
 
             <section className='container'>
 
-                { (!errorUserCode) ? (
-
-                    <>
-                        <UserPefilBox userData={userData} />
-
-                        <RepositoriesArea
-                            reposToPrint={reposToPrint}
-                            initialRepos={initialRepos}
-                            filterInputVal={filterInputVal}
-                            changeFilterSearch={handleChangeFilterSearch}
-                            html_url={userData.html_url}
-                            errorReposCode={errorReposCode}
-                        />
-                    </>
-
-                ) : (
-                    <ErrorBox statusCode={errorUserCode} />
+                { (errorUserCode) ? <ErrorBox statusCode={errorUserCode} /> : (
+                    <UserWrapper
+                        userData={userData}
+                        initialRepos={initialRepos}
+                        errorReposCode={errorReposCode}
+                    />
                 )}
 
             </section>
