@@ -2,19 +2,14 @@ import css from 'styled-jsx/css';
 
 const ErrorBox = (props) => (
 
-    <div className='errorBox'>
         
-        { props.titleBox ? <h2>{props.titleBox}</h2> : null }
-        
-        <div className='msgBox'>
+    <div className='msgBox'>
 
-            <span>{props.statusCode}</span>
+        <span>{props.statusCode}</span>
 
-            <div className='textBox'>
-                <p>Dev, we have a problem!</p>
-                <p>This data could not be found.</p>
-            </div>
-
+        <div className='textBox'>
+            <p>Dev, we have a problem!</p>
+            <p>This data could not be found.</p>
         </div>
 
         <style jsx>{ errorBoxStyle }</style>
@@ -23,14 +18,8 @@ const ErrorBox = (props) => (
 );
 
 const errorBoxStyle = css`
-    .errorBox {
-        width: 90%;
-        height: 250px;
-        margin: 50px auto;
-    }
-
     .errorBox h2 {
-        width: 100%;
+        width: 380px;
         background-color: #ff533d;
         text-align: center;
         color: #f5f5f5;
@@ -40,18 +29,18 @@ const errorBoxStyle = css`
         line-height: 50px;
         font-size: 1.2rem;
         font-weight: bold;
-        margin: 10px auto 30px;
+        margin: 50px auto;
     }
     
     .msgBox {
         display: flex;
         align-items: center;
-        width: 400px;
+        width: 380px;
         height: 100px;
-        margin: 0 auto;
+        margin: 100px auto;
         background-color: #0f1626;
         border-radius: 4px;
-        border: 2px solid #f5f5f5;
+        border: 1px solid #f5f5f5;
     }
 
     .msgBox span {
@@ -76,7 +65,7 @@ const errorBoxStyle = css`
 
 
     .textBox p {
-        width: 90%;
+        width: 95%;
         margin: 10px auto;
         color: #f5f5f5;
         font-size: 1.1rem;

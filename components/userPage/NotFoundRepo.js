@@ -3,8 +3,8 @@ import css from 'styled-jsx/css';
 const NotFoundRepo = ({ link }) => (
     <>
         <p className='msg'>
-            Não encontramos este repositório! =/ <br /> 
-            Você pode visitar o perfil do usuário <a target='_blanc' href={link} >clicando aqui</a> para mais informações.
+            We didn't find this repository!<br /> 
+            You can visit the user's profile by <a target='_blanc' href={link} >clicking here</a> for more information.
         </p>
 
         <style jsx>{ notFoundRepoStyle }</style>
@@ -14,7 +14,7 @@ const NotFoundRepo = ({ link }) => (
 const notFoundRepoStyle = css`
 
     .msg {
-        margin: 10px auto;
+        margin: 40px auto;
         text-align: center;
         width: 80%;
         height: 100px;
@@ -24,8 +24,7 @@ const notFoundRepoStyle = css`
     }
 
     .msg a {
-        color: #0f1626;
-        font-weight: bold;
+        color: #f5f5f5;
     }
 `
 

@@ -18,16 +18,26 @@ const Repositories = ({ repos }) => (
 )
 
 const repositoriesStyle = css`
+    ul {
+        width: 95%;
+        margin: auto;
+        height: 390px;
+        overflow: auto;
+    }
     .repo {
-        margin: 10px auto;
-        width: 70%;
+        margin: 10px 0;
+        width: max-content;
         height: 30px;
         line-height: 30px;
+        transition: all .3s ease-in-out;
     }
-
+        .repo:hover {
+            padding-left: 5px;
+        }
     .repo a {
-        color: #f5f5f5; 
-    }
+        color: #f5f5f5;
+        margin: 10px;
+    }  
 `;
 
 

@@ -9,18 +9,23 @@ import css from 'styled-jsx/css';
 
 const RepositoriesArea = (props) => {
 
-    const { reposToPrint, initialRepos, html_url, filterInputVal, changeFilterSearch, errorReposCode } = props;
+    const {
+        reposToPrint, userHasRepos, html_url, filterInputVal, 
+        changeFilterSearch, errorReposCode, login,
+    
+    } = props;
 
+    console.log(userHasRepos)
     return (
         <div className='reposArea'>
             
             <h3>Repositories</h3>
 
-            { (!errorReposCode) ? (
+            { (errorReposCode) ? ( 
+                <ErrorBox statusCode={errorReposCode} /> 
+            ) : (
 
-                (initialRepos.length === 0) ? (
-                    <p> User doesn't have any public repositories on github yet </p>
-                ) : (
+                (userHasRepos) ? (
 
                     <>
                         <FilterBox 
@@ -30,19 +35,14 @@ const RepositoriesArea = (props) => {
 
                         { (reposToPrint.length === 0) 
                             ? <NotFoundRepo link={html_url}/>
-                            : <Repositories repos={reposToPrint}/>
+                            : <Repositories repos={reposToPrint} />
                         }
-
-                        { (reposToPrint.length >= 30) && (
-                            <a className='linkToPage' target='_blanc' href={html_url} >
-                                view all repositories
-                            </a> 
-                        )}
                     </>
+
+                ) : (
+                    <p>{`${login} doesn't have any public repositories on github yet.`}</p>
                 )
-            
-            ) : (
-                <ErrorBox statusCode={errorReposCode} />
+
             )}
 
             <style jsx>{ repositoriesAreaStyle }</style>
@@ -53,33 +53,41 @@ const RepositoriesArea = (props) => {
 
 const repositoriesAreaStyle = css`
     .reposArea {
+        margin: 20px auto;
         display: flex;
         flex-direction: column;
-        width: 90%;
-        min-height: 1100px;
+        align-items: center;
+        width: 400px;
+        max-width: 400px;
+        height: 560px;
+        flex-shrink: 1;
+        border-radius: 5px;
+        border: 1px solid #f5f5f5;
+        box-shadow: 5px 5px 15px black;
+        background-color: #0f1626;
     }
 
     .reposArea h3 {
+        border-radius: 4px 4px 0 0;
         text-align: center;
         width: 100%;
-        height: 50px;
-        line-height: 50px;
-        margin: 30px auto 30px;
+        height: 80px;
+        line-height: 80px;
+        margin: 0 auto;
         background-color: #ff533d;
         color: #f5f5f5;
         text-transform: uppercase;
-        font-weight: bold;
         font-size: 1.1rem;
     }
 
-    .linkToPage {
-        margin: 10px auto 30px;
-        width: 100px;
+    .reposArea p {
+        width: 85%;
         text-align: center;
-        height: 30px;
-        line-height: 30px;
+        margin: 30px auto;
         color: #f5f5f5;
-        font-size: 1.1rem;
+        min-height: 70px;
+        height: max-content;
+        line-height: 35px; 
     }
 `
 

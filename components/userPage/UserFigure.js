@@ -36,7 +36,7 @@ const userFigureStyle = css`
         height: 35px;
         line-height: 35px;
         font-size: 1.1rem;
-        background-color: #0f1626;
+        background-color: #ff533d;
         color: #f5f5f5;
     }
 `;

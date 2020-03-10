@@ -13,35 +13,30 @@ const UserPage = ({ errorUserCode, errorReposCode, userData, initialRepos }) => 
 
         <PagesDisplay>
 
-            <section className='container'>
-
-                { (errorUserCode) ? <ErrorBox statusCode={errorUserCode} /> : (
-                    <UserWrapper
-                        userData={userData}
-                        initialRepos={initialRepos}
-                        errorReposCode={errorReposCode}
-                    />
-                )}
-
-            </section>
+            { (errorUserCode) ? (
+                <div>
+                    <ErrorBox statusCode={errorUserCode} /> 
+                </div>
+            ) : (
+                <UserWrapper
+                    userData={userData}
+                    initialRepos={initialRepos}
+                    errorReposCode={errorReposCode}
+                />
+            )}
 
             <style jsx>{ userPageStyle }</style>
 
         </PagesDisplay>
     )
 }
-        
+
 
 const userPageStyle = css`
-    .container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+    div {
         width: 100%;
         min-height: 100%;
         background-color: #f5f5f5;
-        background-image: linear-gradient(#f5f5f5, #0f1626);
     }
 `
 

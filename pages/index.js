@@ -12,14 +12,14 @@ const HomePage = ({ errorCode, initialCards }) => {
     return (
         <PagesDisplay>
 
-            <div className='container'>
+            { (errorCode) ? (
+                <div>
+                    <ErrorBox statusCode={errorCode} />
+                </div>
+            ) : (
+                <HomeWrapper initialCards={initialCards} /> 
+            )}
 
-                { (errorCode) 
-                    ? <ErrorBox statusCode={errorCode} />
-                    : <HomeWrapper initialCards={initialCards} /> 
-                }
-
-            </div>
             
             <style jsx>{ homePageStyles }</style>
 
@@ -28,11 +28,7 @@ const HomePage = ({ errorCode, initialCards }) => {
 };
 
 const homePageStyles = css`
-    .container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+    .div {
         width: 100%;
         min-height: 100%;
         background-color: #0f1626;

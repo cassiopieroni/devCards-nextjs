@@ -42,11 +42,9 @@ const cardStyle = css`
         border: 1px solid #f5f5f5;
         transition: all .4s ease-in-out;
         flex: 1;
-        box-shadow: 2px 2px 3px black;
     }
         .card:hover {
-            transform: translateY(-15px);
-            box-shadow: 13px 13px 12px black;
+            transform: scale(.97);
         }
 `
 

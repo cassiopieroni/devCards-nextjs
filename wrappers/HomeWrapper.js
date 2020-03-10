@@ -70,8 +70,9 @@ const HomeWrapper = ({ initialCards }) => {
     }
     //------ EVENT HANDLE FUNCTIONS ---------------
 
-    return (      
-        <>
+    return (
+
+        <div>
             <AddCardForm 
                 handleSubmit={handleSubmitAddCard}
                 handleUsername={handleUsernameControllInput}
@@ -89,19 +90,29 @@ const HomeWrapper = ({ initialCards }) => {
             )}
             
             <style jsx>{ msgStyle }</style>
-        </>
+        </div>
     )
 }
 
 const msgStyle = css`
-    .msg {
-            text-transform: uppercase;
-            max-width: 550px;
-            margin: 30px auto 10px;
-            height: 40px;
-            text-align: center;
-            color: #ff533d;
+    div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: start;
+        width: 100%;
+        min-height: 100%;
+        background-color: #0f1626;
         }
+    .msg {
+        text-transform: uppercase;
+        max-width: 550px;
+        margin: 20px auto 10px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        color: #ff533d;
+    }
 `;
 
 export default HomeWrapper;

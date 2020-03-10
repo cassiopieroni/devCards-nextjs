@@ -26,25 +26,27 @@ const userInfosStyle = css`
     .userInfos {
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: center;
+        align-items: center;
         width: 400px;
         max-width: 400px;
+        height: 160px;
         max-height: 160px;
-        height: max-content;
-        color: #0f1626;
+        color: #f5f5f5;
         text-transform: uppercase;
     }
 
     .userInfos p {
         width: 90%;
-        max-height: 80px;
+        max-height: 70px;
         height: max-content;
-        line-height: 35px;
+        line-height: 30px;
         text-transform: initial;
         margin: 10px auto;
         text-align: center;
+        text-overflow: ellipsis;
         font-size: 1.1rem;
-        overflow: hidden;
+        text-overflow: hidden;
     }
 
     .linksBox{
@@ -63,7 +65,12 @@ const userInfosStyle = css`
         line-height: 25px;
         text-align: center;
         font-size: 1rem;
-        color: #0f1626;
+        color: #f5f5f5;
+        transition: all .3s ease-in-out;
+        box-sizing: border-box;
+    }
+    .link:hover {
+        transform: scale(1.05);
     }
 `;
 
