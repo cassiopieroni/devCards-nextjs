@@ -1,31 +1,27 @@
 import React from 'react';
-import fetch from 'isomorphic-unfetch';
-
+import * as apiServices from '../requests/apiServices';
 import PagesDisplay from '../components/commonComps/PagesDisplay';
 import ErrorBox from '../components/commonComps/ErrorBox';
-import HomeWrapper from '../wrappers/HomeWrapper';
+import HomeContainer from '../containers/HomeContainer';
 
 import css from 'styled-jsx/css';
 
-const HomePage = ({ errorCode, initialCards }) => {
+const HomePage = ({ error , initialCards }) => (
+    
+    <PagesDisplay>
 
-    return (
-        <PagesDisplay>
+        { (error) ? (
+            <div>
+                <ErrorBox statusCode={error.status} msg={error.msg} />
+            </div>
+        ) : (
+            <HomeContainer initialCards={initialCards} /> 
+        )}
 
-            { (errorCode) ? (
-                <div>
-                    <ErrorBox statusCode={errorCode} />
-                </div>
-            ) : (
-                <HomeWrapper initialCards={initialCards} /> 
-            )}
+        <style jsx>{ homePageStyles }</style>
 
-            
-            <style jsx>{ homePageStyles }</style>
-
-        </PagesDisplay>
-    )
-};
+    </PagesDisplay>
+)
 
 const homePageStyles = css`
     .div {
@@ -37,15 +33,15 @@ const homePageStyles = css`
 
 HomePage.getInitialProps = async () => {
 
-    const CARDS_API = 'https://api.github.com/users/cassiopieroni';
+    const cardsParams = 'cassiopieroni';
     // apenas simulando uma busca de cards
     // originalmente buscaria um [] de cards em uma api
 
-    const res = await fetch(`${CARDS_API}`);
-    const errorCode = res.status > 200 ? res.status : false;
+    const res = await apiServices.getInitialData(cardsParams);
+    const error  = res.status > 200 ? {status: res.status, msg: res.statusText} : false;
     const cards = await res.json();
-
-    return { errorCode, initialCards: [cards] }
+    
+    return { error , initialCards: [cards] }
 }
 
 export default HomePage;

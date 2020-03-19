@@ -9,7 +9,13 @@ const ErrorBox = (props) => (
 
         <div className='textBox'>
             <p>Dev, we have a problem!</p>
-            <p>This data could not be found.</p>
+            
+            { (props.msg) ? (
+                <p>{props.msg}</p>
+            ) : (
+                <p>This data could not be found.</p>
+            )}
+        
         </div>
 
         <style jsx>{ errorBoxStyle }</style>

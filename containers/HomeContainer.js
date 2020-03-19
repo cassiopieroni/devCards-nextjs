@@ -4,13 +4,13 @@ import { useRouter } from 'next/router';
 import AddCardForm from '../components/indexPage/AddCardForm';
 import CardsArea from '../components/indexPage/CardsArea';
 
-import { getGithubUser } from '../requests/getGithubUser';
+import * as apiServices from '../requests/apiServices';
 import { isRepeatedCard } from '../helpers/isRepeatedCard';
 
 import css from 'styled-jsx/css';
 
 
-const HomeWrapper = ({ initialCards }) => {
+const HomeContainer = ({ initialCards }) => {
 
     const router = useRouter();
 
@@ -34,18 +34,10 @@ const HomeWrapper = ({ initialCards }) => {
     }, [newUser]);
 
 
-    const fetchingCard = async () => {    
-        try {
-            const githubResponse = await getGithubUser(usernameInput);
-            const user = await githubResponse.json();
-            
-            return (user && user.id) 
-                ? setNewUser(user)
-                : setMessage(`${usernameInput} is an invalid user`);
-        
-        } catch (err) {
-            setMessage(`Couldn't add a new card (${err}).`)
-        }
+    const fetchingCard = () => {   
+        apiServices.getGithubUser(usernameInput)
+            .then(user => setNewUser(user))
+            .catch( err => setMessage(`Couldn't add a new card (${err}).`))
     }
 
 
@@ -115,4 +107,4 @@ const msgStyle = css`
     }
 `;
 
-export default HomeWrapper;
+export default HomeContainer;

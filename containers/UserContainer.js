@@ -7,7 +7,7 @@ import { isListEmpty } from '../helpers/isListEmpty';
 
 import css from 'styled-jsx/css';
 
-const UserWrapper = ({ userData, initialRepos, errorReposCode }) => {
+const UserContainer = ({ userData, initialRepos, errorRepos }) => {
 
     const [filterInputVal, setFilterInputVal] = useState('');
 
@@ -44,18 +44,18 @@ const UserWrapper = ({ userData, initialRepos, errorReposCode }) => {
                     filterInputVal={filterInputVal}
                     changeFilterSearch={handleChangeFilterSearch}
                     html_url={userData.html_url}
-                    errorReposCode={errorReposCode}
+                    errorRepos={errorRepos}
                 />
 
             </div>
 
-            <style jsx>{ userWrapperStyle }</style>
+            <style jsx>{ userContainerStyle }</style>
 
         </section>
     )
 }
 
-const userWrapperStyle = css`
+const userContainerStyle = css`
     section {
         display: column;
         align-items: center;
@@ -91,4 +91,4 @@ const userWrapperStyle = css`
     }
 `
 
-export default UserWrapper;
+export default UserContainer;

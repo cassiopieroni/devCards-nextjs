@@ -1,27 +1,28 @@
 import React from 'react';
-import fetch from 'isomorphic-unfetch';
+
+import * as apiServices from '../../requests/apiServices';
 
 import PagesDisplay from '../../components/commonComps/PagesDisplay';
 import ErrorBox from '../../components/commonComps/ErrorBox';
-import UserWrapper from '../../wrappers/UserWrapper';
+import UserContainer from '../../containers/UserContainer';
 
 import css from 'styled-jsx/css';
 
-const UserPage = ({ errorUserCode, errorReposCode, userData, initialRepos }) => {
+const UserPage = ({ errorUser, errorRepos, userData, initialRepos }) => {
 
     return (
 
         <PagesDisplay>
 
-            { (errorUserCode) ? (
+            { (errorUser) ? (
                 <div>
-                    <ErrorBox statusCode={errorUserCode} /> 
+                    <ErrorBox statusCode={errorUser.status} msg={errorUser.msg} /> 
                 </div>
             ) : (
-                <UserWrapper
+                <UserContainer
                     userData={userData}
                     initialRepos={initialRepos}
-                    errorReposCode={errorReposCode}
+                    errorRepos={errorRepos}
                 />
             )}
 
@@ -45,15 +46,15 @@ UserPage.getInitialProps = async ctx => {
 
     const { user } = ctx.query;
 
-    const resUser = await fetch(`https://api.github.com/users/${user}`);
-    const errorUserCode = resUser.status > 200 ? resUser.status : false;
+    const resUser = await apiServices.getInitialData(user);
+    const errorUser = resUser.status > 200 ? {status: resUser.status, msg: resUser.statusText} : false;
     const userData = await resUser.json();
     
-    const resRepos = await fetch(`https://api.github.com/users/${user}/repos`);
-    const errorReposCode = resRepos.status > 200 ? resRepos.status : false;
+    const resRepos = await apiServices.getInitialRepos(user);
+    const errorRepos = resRepos.status > 200 ? {status: resRepos.status, msg: resRepos.statusText} : false;
     const initialRepos = await resRepos.json();
 
-    return { errorUserCode, errorReposCode, userData, initialRepos }
+    return { errorUser, errorRepos, userData, initialRepos }
 }
 
 export default UserPage;

@@ -11,18 +11,17 @@ const RepositoriesArea = (props) => {
 
     const {
         reposToPrint, userHasRepos, html_url, filterInputVal, 
-        changeFilterSearch, errorReposCode, login,
+        changeFilterSearch, errorRepos, login,
     
     } = props;
 
-    console.log(userHasRepos)
     return (
         <div className='reposArea'>
             
             <h3>Repositories</h3>
 
-            { (errorReposCode) ? ( 
-                <ErrorBox statusCode={errorReposCode} /> 
+            { (errorRepos) ? ( 
+                <ErrorBox statusCode={errorRepos.status}  msg={errorRepos.msg} /> 
             ) : (
 
                 (userHasRepos) ? (
