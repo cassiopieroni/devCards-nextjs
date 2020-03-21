@@ -1,6 +1,7 @@
 import React from 'react';
-import Link from 'next/link';
 import css from 'styled-jsx/css';
+
+import LinkWrapper from './LinkWrapper';
 
 const HeaderDisplay = () => (
 
@@ -11,15 +12,11 @@ const HeaderDisplay = () => (
         <nav className='navBox'>
 
             <div className='linksBox homeBox'>
-                <Link href='/'>
-                    <a className='links' >HOME</a>
-                </Link>
+                <LinkWrapper to='/' className='headerLinks' >home</LinkWrapper>
             </div>
 
             <div className='linksBox aboutBox'>
-                <Link href='/about'>
-                    <a className='links' >ABOUT</a>
-                </Link>
+                <LinkWrapper to='/about' className='headerLinks' >about</LinkWrapper>
             </div>
 
         </nav>
@@ -69,19 +66,6 @@ const headerDisplayStyles = css`
     .aboutBox {
         background-color: #ab987a;
     }
-
-    .links {
-        padding: 8px;
-        color: #f5f5f5;
-        text-decoration: none;
-        transition: all .5s ease-out;
-        border-bottom: 1px solid transparent;
-        text-transform: uppercase;
-    }
-
-        .links:hover {
-            border-color: #f5f5f5;
-        }  
 `
 
 export default HeaderDisplay;
