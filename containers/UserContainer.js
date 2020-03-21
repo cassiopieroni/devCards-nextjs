@@ -3,8 +3,6 @@ import React, { useState, useEffect } from 'react';
 import RepositoriesArea from '../components/userPage/RepositoriesArea';
 import UserPefilBox from '../components/userPage/UserPerfilBox';
 
-import { isListEmpty } from '../helpers/isListEmpty';
-
 import css from 'styled-jsx/css';
 
 const UserContainer = ({ userData, initialRepos, errorRepos }) => {
@@ -25,8 +23,6 @@ const UserContainer = ({ userData, initialRepos, errorRepos }) => {
     
     const handleChangeFilterSearch = e => setFilterInputVal(e.target.value.toLowerCase());
 
-    const userHasRepos = (!isListEmpty(initialRepos));
-
     return (
 
         <section>
@@ -38,7 +34,7 @@ const UserContainer = ({ userData, initialRepos, errorRepos }) => {
                 <UserPefilBox userData={userData} />
             
                 <RepositoriesArea
-                    userHasRepos={userHasRepos}
+                    allRepos={initialRepos}
                     login={userData.login}
                     reposToPrint={reposToPrint}
                     filterInputVal={filterInputVal}

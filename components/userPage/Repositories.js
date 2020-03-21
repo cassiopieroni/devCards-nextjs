@@ -1,21 +1,27 @@
+import React from 'react';
+import NotFoundRepo from './NotFoundRepo';
 import css from 'styled-jsx/css';
 
-const Repositories = ({ repos }) => (
+const Repositories = ({ repos, html_url }) => {
+    if (repos.length) {
+        return (
+            <>
+                <ul>
+                    { repos.map( repo =>  
+                        <li className='repo' key={repo.id} >
+                            <a target='_blank' href={repo.html_url}>
+                                {repo.name}
+                            </a>
+                        </li>
+                    )}
+                </ul>
 
-    <>
-        <ul>
-            { repos.map( repo =>  
-                <li className='repo' key={repo.id} >
-                    <a target='_blank' href={repo.html_url}>
-                        {repo.name}
-                    </a>
-                </li>
-            )}
-        </ul>
-
-        <style jsx>{ repositoriesStyle }</style>
-    </>
-)
+                <style jsx>{ repositoriesStyle }</style>
+            </>
+        )
+    } else 
+        return <NotFoundRepo link={html_url}/>
+}
 
 const repositoriesStyle = css`
     ul {

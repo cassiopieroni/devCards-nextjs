@@ -1,7 +1,6 @@
 import React from 'react';
 
 import FilterBox from './FilterBox';
-import NotFoundRepo from './NotFoundRepo';
 import Repositories from './Repositories';
 import ErrorBox from '../commonComps/ErrorBox';
 
@@ -10,7 +9,7 @@ import css from 'styled-jsx/css';
 const RepositoriesArea = (props) => {
 
     const {
-        reposToPrint, userHasRepos, html_url, filterInputVal, 
+        reposToPrint, allRepos, html_url, filterInputVal, 
         changeFilterSearch, errorRepos, login,
     
     } = props;
@@ -24,20 +23,15 @@ const RepositoriesArea = (props) => {
                 <ErrorBox statusCode={errorRepos.status}  msg={errorRepos.msg} /> 
             ) : (
 
-                (userHasRepos) ? (
-
+                (allRepos.length) ? (
                     <>
                         <FilterBox 
                             filterInputVal={filterInputVal} 
                             changeFilterSearch={changeFilterSearch} 
                         />
-
-                        { (reposToPrint.length === 0) 
-                            ? <NotFoundRepo link={html_url}/>
-                            : <Repositories repos={reposToPrint} />
-                        }
+ 
+                        <Repositories repos={reposToPrint} html_url={html_url} />
                     </>
-
                 ) : (
                     <p>{`${login} doesn't have any public repositories on github yet.`}</p>
                 )

@@ -3,25 +3,28 @@ import CardBox from './CardBox';
 import css from 'styled-jsx/css';
 
 
-const CardsArea = ({ cards, deleteCard, changePage }) => (
-    
-    <section className='cardsContainer'>
+const CardsArea = ({ cards, deleteCard, changePage }) => {
 
-        { cards.map( card => (
+    if (cards && cards.length) {
+        return (
+            <section className='cardsContainer'>
 
-            <CardBox 
-                key={card.id}
-                card={card}
-                deleteCard={deleteCard}
-                changePage={changePage}
-            />
+                { cards.map( card => (
+                    <CardBox 
+                        key={card.id}
+                        card={card}
+                        deleteCard={deleteCard}
+                        changePage={changePage}
+                    />
+                ))}
 
-        ))}
+                <style jsx>{ cardsAreaStyle }</style>
 
-        <style jsx>{ cardsAreaStyle }</style>
-
-    </section>
-)
+            </section>
+        )
+    }
+    return null;
+}
 
 const cardsAreaStyle = css`
 

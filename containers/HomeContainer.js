@@ -73,13 +73,11 @@ const HomeContainer = ({ initialCards }) => {
 
             <p className='msg' >{message}</p>
 
-            { (cards && cards.length > 0) && (
-                <CardsArea 
-                    cards={cards} 
-                    changePage={handleChangeToUserPage} 
-                    deleteCard={handleDeleteCard} 
-                />
-            )}
+            <CardsArea 
+                cards={cards} 
+                changePage={handleChangeToUserPage} 
+                deleteCard={handleDeleteCard} 
+            />
             
             <style jsx>{ msgStyle }</style>
         </div>
