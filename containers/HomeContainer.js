@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 
 import AddCardForm from '../components/indexPage/AddCardForm';
 import CardsArea from '../components/indexPage/CardsArea';
+import Message from '../components/indexPage/Message';
 
 import * as apiServices from '../requests/apiServices';
 import { isRepeatedCard } from '../helpers/isRepeatedCard';
@@ -14,19 +15,21 @@ const HomeContainer = ({ initialCards }) => {
 
     const router = useRouter();
 
-    const [usernameInput, setUsernameInput] = useState('');
-    const [message, setMessage] = useState('');
-    const [newUser, setNewUser] = useState({});
     const [cards, setCards] = useState(initialCards);
+    const [message, setMessage] = useState({});
+    const [usernameInput, setUsernameInput] = useState('');
+    const [newUser, setNewUser] = useState({});
     
+
     useEffect(() => {
-        if (cards.length === 0) setMessage(`You don't have any cards yet  =/`);
+        if (!cards.length)
+            handleErrorMsg(`You don't have any cards yet  =/`);
     }, []);
     
     useEffect( () => {
         const addingNewCard = () => {
             setCards( [newUser, ...cards] );
-            setMessage(`${newUser.login} added successfully!`);
+            handleSuccessMsg(`${newUser.login} added successfully!`);
             setUsernameInput('');
         }
 
@@ -37,17 +40,17 @@ const HomeContainer = ({ initialCards }) => {
     const fetchingCard = () => {   
         apiServices.getGithubUser(usernameInput)
             .then(user => setNewUser(user))
-            .catch( err => setMessage(`Couldn't add a new card (${err}).`))
+            .catch( err => handleErrorMsg(`Couldn't add a new card (${err}).`))
     }
 
 
-    //------ EVENT HANDLE FUNCTIONS ---------------
+    //------ EVENT HANDLE FUNCTIONS --------------
     const handleSubmitAddCard = e => {
         e.preventDefault();
-        setMessage('Loading...');
+        handleSuccessMsg('Loading...');
 
         return ( isRepeatedCard(cards, usernameInput) ) 
-            ? setMessage(`${usernameInput} is already on your card list.`) 
+            ? handleErrorMsg(`${usernameInput} is already on your card list.`) 
             : fetchingCard();
     }
 
@@ -58,8 +61,11 @@ const HomeContainer = ({ initialCards }) => {
     const handleDeleteCard = userLogin => {    
         const newCards = cards.filter( card => card.login !== userLogin);
         setCards(newCards);
-        setMessage(`${userLogin} has been successfully deleted.`)
+        handleSuccessMsg(`${userLogin} has been successfully deleted.`)
     }
+
+    const handleSuccessMsg = text => setMessage({ ...message, status: 'success', text });
+    const handleErrorMsg = text => setMessage({ ...message, status: 'error', text });
     //------ EVENT HANDLE FUNCTIONS ---------------
 
     return (
@@ -71,7 +77,7 @@ const HomeContainer = ({ initialCards }) => {
                 username={usernameInput}
             />
 
-            <p className='msg' >{message}</p>
+            <Message status={message.status} text={message.text} />
 
             <CardsArea 
                 cards={cards} 
@@ -94,7 +100,7 @@ const msgStyle = css`
         min-height: 100%;
         background-color: #0f1626;
         }
-    .msg {
+    /* .msg {
         text-transform: uppercase;
         max-width: 550px;
         margin: 20px auto 10px;
@@ -102,7 +108,7 @@ const msgStyle = css`
         line-height: 30px;
         text-align: center;
         color: #ff533d;
-    }
+    } */
 `;
 
 export default HomeContainer;
