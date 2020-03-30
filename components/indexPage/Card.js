@@ -40,11 +40,12 @@ const cardStyle = css`
         cursor: pointer;
         border-radius: 2px;
         border: 1px solid #f5f5f5;
-        transition: all .4s ease-in-out;
+        transition: all .2s ease-in-out;
         flex: 1;
     }
         .card:hover {
-            transform: scale(.97);
+            transform: translateY(-5px);
+            box-shadow: 3px 5px 5px #000000;
         }
 `
 
